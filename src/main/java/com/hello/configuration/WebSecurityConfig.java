@@ -2,7 +2,6 @@ package com.hello.configuration;
 
 import com.hello.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,8 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 import java.time.Duration;
@@ -19,17 +16,6 @@ import java.time.Duration;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final String LOGIN_URL = "/login";
-
-    @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new LoginUrlAuthenticationEntryPoint(LOGIN_URL);
-    }
-
-    @Bean
-    public OpenIDConnectAuthenticationFilter openIdConnectAuthenticationFilter() {
-        return new OpenIDConnectAuthenticationFilter(LOGIN_URL);
-    }
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
@@ -44,13 +30,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxAgeInSeconds(Duration.ofDays(365).getSeconds());
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/", "/home", "/h2-console").permitAll()
+                .antMatchers("/css/*", "/js/*", "/img/*", "/", "/home", "/h2-console").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .openidLogin()
-                .loginPage("/login")
-                .permitAll()
-                .authenticationUserDetailsService(new UserService());
+                    .loginPage("/login")
+                    .permitAll()
+                    .authenticationUserDetailsService(new UserService())
+                    .attributeExchange(".*appdirect.com.*")
+                        .attribute("email")
+                            .type("http://axschema.org/contact/email")
+                            .required(true)
+                            .and()
+                        .attribute("firstname")
+                            .type("http://axschema.org/namePerson/first")
+                            .required(true)
+                            .and()
+                        .attribute("lastname")
+                            .type("http://axschema.org/namePerson/last")
+                            .required(true);
     }
 
     @Autowired

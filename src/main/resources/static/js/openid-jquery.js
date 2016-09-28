@@ -37,7 +37,6 @@ var openid = {
         this.input_id = input_id;
 
         $('#openid_choice').show();
-        $('#openid_input_area').empty();
 
         // add box for each provider
         for (id in providers_large) {
@@ -63,9 +62,9 @@ var openid = {
     getBoxHTML: function(provider, box_size, image_ext) {
 
         var box_id = provider["name"].toLowerCase();
-        return '<a title="'+provider["name"]+'" href="javascript: openid.signin(\''+ box_id +'\');"' +
+        return '<div title="'+provider["name"]+'" ' +
                 ' style="background: #FFF url(' + this.img_path + box_id + image_ext+') no-repeat center center" ' +
-                'class="' + box_id + ' openid_' + box_size + '_btn"></a>';
+                'class="' + box_id + ' openid_' + box_size + '_btn"></div>';
 
     },
     /* Provider image click */
@@ -83,9 +82,7 @@ var openid = {
         this.provider_url = provider['url'];
 
         // prompt user for input?
-        if (provider['label']) {
-            this.useInputBox(provider);
-        } else {
+        if (!provider['label']) {
             $('#openid_input_area').empty();
             if (! onload) {
                 $('#openid_form').submit();
@@ -146,32 +143,6 @@ var openid = {
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
         }
         return null;
-    },
-    useInputBox: function (provider) {
-
-        var input_area = $('#openid_input_area');
-
-        var html = '';
-        var id = 'openid_username';
-        var value = '';
-        var label = provider['label'];
-        var style = '';
-
-        if (label) {
-            html = '<p>' + label + '</p>';
-        }
-        if (provider['name'] == 'OpenID') {
-            id = this.input_id;
-            value = 'http://';
-            style = 'background:#FFF url('+this.img_path+'openid-inputicon.gif) no-repeat scroll 0 50%; padding-left:18px;';
-        }
-        html += '<input id="'+id+'" type="text" style="'+style+'" name="'+id+'" value="'+value+'" />' +
-                    '<input id="openid_submit" type="submit" value="Sign-In"/>';
-
-        input_area.empty();
-        input_area.append(html);
-
-        $('#'+id).focus();
     },
     setDemoMode: function (demoMode) {
         this.demo = demoMode;

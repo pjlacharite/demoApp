@@ -19,4 +19,21 @@ public class SubscriptionEvent implements Serializable {
     public Long getId() {
         return id;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof SubscriptionEvent) {
+            SubscriptionEvent subscriptionEvent = (SubscriptionEvent) obj;
+            return subscriptionEvent.getId().equals(this.getId());
+        }
+        return false;
+    }
 }

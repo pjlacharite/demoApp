@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxAgeInSeconds(Duration.ofDays(365).getSeconds());
         http
                 .authorizeRequests()
-                .antMatchers("/css/*", "/js/*", "/img/*", "/", "/home", "/h2-console", "/subscription/**").permitAll()
+                .antMatchers("/css/*", "/js/*", "/img/*", "/", "/home", "/h2-console", "/subscription/**", "/test/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .openidLogin()

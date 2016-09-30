@@ -1,9 +1,6 @@
 package com.hello.model.subscription;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -14,7 +11,9 @@ public class SubscriptionEvent implements Serializable {
     private Long id;
     private String type;
     private Marketplace marketplace;
+    @Column(columnDefinition = "BINARY(1023)")
     private Creator creator;
+    @Column(columnDefinition = "BINARY(1023)")
     private Payload payload;
 
     public Long getId() {

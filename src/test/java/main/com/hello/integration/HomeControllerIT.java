@@ -1,5 +1,6 @@
-package main.integration;
+package main.com.hello.integration;
 
+import com.hello.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,12 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URL;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HelloControllerIT {
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class HomeControllerIT {
 
     @LocalServerPort
     private int port;
@@ -33,9 +34,9 @@ public class HelloControllerIT {
     }
 
     @Test
-    public void getHello() throws Exception {
+    public void testHome() throws Exception {
         ResponseEntity<String> response = template.getForEntity(base.toString(),
                 String.class);
-        assertThat(response.getBody(), equalTo("Greetings from Spring Boot!"));
+        assertThat(response.getBody(), containsString("Welcome!"));
     }
 }

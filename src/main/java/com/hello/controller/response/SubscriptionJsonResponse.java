@@ -3,42 +3,42 @@ package com.hello.controller.response;
 public class SubscriptionJsonResponse {
     public static final String ERROR_CODE_GENERAL = "Subscription error";
     public static final String ERROR_MESSAGE_GENERAL = "An error was encountered while processing your subscription event";
-    private boolean success = false;
-    private Long accountIdentifier;
+    private String success = "false";
+    private String accountIdentifier;
     private String errorCode;
     private String message;
 
     public SubscriptionJsonResponse() {
     }
 
-    public static SubscriptionJsonResponse getSuccessResponse(Long accountIdentifier){
+    public static SubscriptionJsonResponse getSuccessResponse(String accountIdentifier){
         SubscriptionJsonResponse subscriptionJsonResponse = new SubscriptionJsonResponse();
-        subscriptionJsonResponse.success = true;
+        subscriptionJsonResponse.success = "true";
         subscriptionJsonResponse.accountIdentifier = accountIdentifier;
         return subscriptionJsonResponse;
     }
 
     public static SubscriptionJsonResponse getFailureResponse(String message, String errorCode){
         SubscriptionJsonResponse subscriptionJsonResponse = new SubscriptionJsonResponse();
-        subscriptionJsonResponse.success = false;
+        subscriptionJsonResponse.success = "false";
         subscriptionJsonResponse.message = message;
         subscriptionJsonResponse.errorCode = errorCode;
         return subscriptionJsonResponse;
     }
 
-    public boolean isSuccess() {
+    public String getSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
+    public void setSuccess(String success) {
         this.success = success;
     }
 
-    public Long getAccountIdentifier() {
+    public String getAccountIdentifier() {
         return accountIdentifier;
     }
 
-    public void setAccountIdentifier(Long accountIdentifier) {
+    public void setAccountIdentifier(String accountIdentifier) {
         this.accountIdentifier = accountIdentifier;
     }
 

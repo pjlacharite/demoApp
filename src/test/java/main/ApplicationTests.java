@@ -1,6 +1,6 @@
 package main;
 
-import com.hello.Application;
+import com.demoapp.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

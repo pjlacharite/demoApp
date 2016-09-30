@@ -17,12 +17,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers()
+                .frameOptions().sameOrigin()
                 .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "default-src 'self'"))
                 .addHeaderWriter(new StaticHeadersWriter("X-WebKit-CSP", "default-src 'self'"))
                 .httpStrictTransportSecurity()
                 .includeSubDomains(true)
                 .maxAgeInSeconds(Duration.ofDays(365).getSeconds());
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/*", "/js/*", "/img/*", "/", "/home", "/h2-console", "/subscription/**", "/test/**").permitAll()
                 .anyRequest().authenticated()

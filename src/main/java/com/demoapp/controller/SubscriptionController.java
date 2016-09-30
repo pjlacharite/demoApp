@@ -29,15 +29,12 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
-
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_JSON_VALUE)
-
     public ResponseEntity<SubscriptionJsonResponse> create(@RequestParam(value = "eventUrl") String eventUrl) {
         LOGGER.log(Level.INFO, "Processing create request: " + eventUrl);
         final HttpHeaders httpHeaders= new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(subscriptionService.createSubscription(eventUrl), httpHeaders, HttpStatus.OK);
     }
-
 
 }

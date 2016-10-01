@@ -1,11 +1,11 @@
+
+
 # demoApp
 demoApp
 
 TODO:
-1- Sub entities are persisted as binary instead of table reference.
-2- Implement Subscription Change End Point
-3- Manage/Validate Subscriptions (Do not only store them)
-4- oAuth 1.0 verification
+1- Write test/refactor to increase testability.
+2- oAuth 1.0 inbound verification using a filter
 
 Running the application from terminal
     mvn spring-boot:run

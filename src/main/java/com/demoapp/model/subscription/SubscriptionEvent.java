@@ -65,6 +65,6 @@ public class SubscriptionEvent implements Serializable {
             SubscriptionEvent subscriptionEvent = (SubscriptionEvent) obj;
             return subscriptionEvent.getId().equals(this.getId());
         }
-        return false;
+        return super.equals(obj);
     }
 }

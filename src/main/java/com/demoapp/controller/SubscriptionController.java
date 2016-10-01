@@ -37,4 +37,12 @@ public class SubscriptionController {
         return new ResponseEntity<>(subscriptionService.createSubscription(eventUrl), httpHeaders, HttpStatus.OK);
     }
 
+
+    @RequestMapping(value = "/change", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<SubscriptionJsonResponse> change(@RequestParam(value = "eventUrl") String eventUrl){
+        LOGGER.log(Level.INFO, "Processing create request: " + eventUrl);
+        final HttpHeaders httpHeaders= new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(subscriptionService.changeSubscription(eventUrl), httpHeaders, HttpStatus.OK);
+    }
 }

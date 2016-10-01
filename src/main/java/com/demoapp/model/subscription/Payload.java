@@ -15,6 +15,9 @@ public class Payload implements Serializable {
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "order_fk")
     private Order order;
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "account_fk")
+    private Account account;
 
     public Company getCompany() {
         return company;
@@ -30,5 +33,13 @@ public class Payload implements Serializable {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

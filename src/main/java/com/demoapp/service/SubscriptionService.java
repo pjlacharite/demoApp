@@ -4,4 +4,5 @@ import com.demoapp.controller.response.SubscriptionJsonResponse;
 
 public interface SubscriptionService {
     SubscriptionJsonResponse createSubscription(String eventUrl);
+    SubscriptionJsonResponse changeSubscription(String eventUrl);
 }

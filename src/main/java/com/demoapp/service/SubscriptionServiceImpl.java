@@ -79,6 +79,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             LOGGER.log(Level.WARN, "Could not Parse Json to SubscriptionEvent", e);
             errorCode = SubscriptionJsonResponse.ERROR_CODE_INVALID_RESPONSE;
         }
+        LOGGER.log(Level.WARN, "Request to eventURL could not be processed because of error: " + errorCode);
         return SubscriptionJsonResponse.getFailureResponse(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, errorCode);
     }
 }

@@ -9,6 +9,11 @@ import com.demoapp.repository.SubscriptionEventRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -52,7 +57,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             connection.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON_VALUE);
             connection.setRequestProperty(ACCEPT, APPLICATION_JSON_VALUE);
             connection.setRequestMethod(GET.name());
-
+            OAuthConsumer consumer = new DefaultOAuthConsumer("Dummy", "secret");
+            consumer.sign(connection);
             switch (connection.getResponseCode()) {
                 case HttpURLConnection.HTTP_OK:
                     InputStream response = connection.getInputStream();
@@ -89,6 +95,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         } catch (JsonParseException e) {
             LOGGER.log(Level.WARN, "Could not Parse Json to SubscriptionEvent", e);
             errorCode = SubscriptionJsonResponse.ERROR_CODE_INVALID_RESPONSE;
+        } catch (OAuthExpectationFailedException e) {
+            LOGGER.log(Level.WARN, "oAuth did not meet expectation for eventUrl: " + eventUrl, e);
+            errorCode = SubscriptionJsonResponse.ERROR_CODE_UNAUTHORIZED;
+        } catch (OAuthMessageSignerException e) {
+            LOGGER.log(Level.WARN, "Could not sign request with oAuth signature", e);
+            errorCode = SubscriptionJsonResponse.ERROR_CODE_UNAUTHORIZED;
+        } catch (OAuthCommunicationException e) {
+            LOGGER.log(Level.WARN, "oAuth communication error while requesting: " + eventUrl, e);
+            errorCode = SubscriptionJsonResponse.ERROR_CODE_UNAUTHORIZED;
         }
         LOGGER.log(Level.WARN, "Request to eventURL could not be processed because of error: " + errorCode);
         return SubscriptionJsonResponse.getFailureResponse(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, errorCode);

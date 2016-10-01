@@ -40,6 +40,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         String[] schemes = {"http", "https"};
         UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_LOCAL_URLS);
         if (!urlValidator.isValid(eventUrl)) {
+            LOGGER.log(Level.WARN, "URL: " + eventUrl + " is not a valid URL.");
             return SubscriptionJsonResponse.getFailureResponse(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, errorCode);
         }
         try {

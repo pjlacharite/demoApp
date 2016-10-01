@@ -18,6 +18,8 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,9 +35,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Service
+@Configuration
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private static final Logger LOGGER = Logger.getLogger(SubscriptionController.class);
+
+    @Value("${oauth.consumer-key}")
+    private String consumerKey;
+
+    @Value("${oauth.secret}")
+    private String secret;
 
     @Autowired
     private SubscriptionEventRepository subscriptionEventRepository;
@@ -57,7 +66,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             connection.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON_VALUE);
             connection.setRequestProperty(ACCEPT, APPLICATION_JSON_VALUE);
             connection.setRequestMethod(GET.name());
-            OAuthConsumer consumer = new DefaultOAuthConsumer("Dummy", "secret");
+            OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
             consumer.sign(connection);
             switch (connection.getResponseCode()) {
                 case HttpURLConnection.HTTP_OK:

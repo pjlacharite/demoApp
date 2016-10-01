@@ -22,7 +22,7 @@ public class SubscriptionController {
     private static final Logger LOGGER = Logger.getLogger(SubscriptionController.class);
 
     @Autowired
-    SubscriptionService subscriptionService;
+    private SubscriptionService subscriptionService;
 
     @Autowired
     public SubscriptionController(SubscriptionService subscriptionService) {

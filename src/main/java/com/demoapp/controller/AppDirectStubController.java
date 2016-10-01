@@ -9,8 +9,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
-public class TestController {
-    private static final Logger LOGGER = Logger.getLogger(TestController.class);
+public class AppDirectStubController {
+    private static final Logger LOGGER = Logger.getLogger(AppDirectStubController.class);
 
     @RequestMapping(value = "/test", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -1,7 +1,19 @@
 package com.demoapp.controller.response;
 
 public class SubscriptionJsonResponse {
-    public static final String ERROR_CODE_GENERAL = "Subscription error";
+    public static final String ERROR_CODE_USER_ALREADY_EXISTS = "USER_ALREADY_EXISTS";
+    public static final String ERROR_CODE_USER_NOT_FOUND = "USER_NOT_FOUND";
+    public static final String ERROR_CODE_ACCOUNT_NOT_FOUND = "ACCOUNT_NOT_FOUND";
+    public static final String ERROR_CODE_MAX_USERS_REACHED = "MAX_USERS_REACHED";
+    public static final String ERROR_CODE_UNAUTHORIZED = "UNAUTHORIZED";
+    public static final String ERROR_CODE_OPERATION_CANCELED = "OPERATION_CANCELED";
+    public static final String ERROR_CODE_CONFIGURATION_ERROR = "CONFIGURATION_ERROR";
+    public static final String ERROR_CODE_INVALID_RESPONSE = "INVALID_RESPONSE";
+    public static final String ERROR_CODE_FORBIDDEN = "FORBIDDEN";
+    public static final String ERROR_CODE_BINDING_NOT_FOUND = "BINDING_NOT_FOUND";
+    public static final String ERROR_CODE_TRANSPORT_ERROR = "TRANSPORT_ERROR";
+    public static final String ERROR_CODE_UNKNOWN_ERROR = "UNKNOWN_ERROR";
+
     public static final String ERROR_MESSAGE_GENERAL = "An error was encountered while processing your subscription event";
     private String success = "false";
     private String accountIdentifier;
@@ -11,14 +23,14 @@ public class SubscriptionJsonResponse {
     public SubscriptionJsonResponse() {
     }
 
-    public static SubscriptionJsonResponse getSuccessResponse(String accountIdentifier){
+    public static SubscriptionJsonResponse getSuccessResponse(String accountIdentifier) {
         SubscriptionJsonResponse subscriptionJsonResponse = new SubscriptionJsonResponse();
         subscriptionJsonResponse.success = "true";
         subscriptionJsonResponse.accountIdentifier = accountIdentifier;
         return subscriptionJsonResponse;
     }
 
-    public static SubscriptionJsonResponse getFailureResponse(String message, String errorCode){
+    public static SubscriptionJsonResponse getFailureResponse(String message, String errorCode) {
         SubscriptionJsonResponse subscriptionJsonResponse = new SubscriptionJsonResponse();
         subscriptionJsonResponse.success = "false";
         subscriptionJsonResponse.message = message;

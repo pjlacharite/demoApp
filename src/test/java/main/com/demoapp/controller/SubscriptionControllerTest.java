@@ -53,7 +53,7 @@ public class SubscriptionControllerTest {
     public void testSubscriptionCreateFailure() throws Exception {
         SubscriptionJsonResponse subscriptionJsonResponse = SubscriptionJsonResponse.getFailureResponse(
                 SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL,
-                SubscriptionJsonResponse.ERROR_CODE_GENERAL);
+                SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR);
         MockMvc mockMvc = getMockMvc(false);
         MockHttpServletRequestBuilder mockHttpServletRequestBuilder =
                 MockMvcRequestBuilders.get("/subscription/create")
@@ -71,7 +71,7 @@ public class SubscriptionControllerTest {
         }else {
             subscriptionJsonResponse = SubscriptionJsonResponse.getFailureResponse(
                     SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL,
-                    SubscriptionJsonResponse.ERROR_CODE_GENERAL);
+                    SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR);
         }
         SubscriptionService subscriptionService = eventUrl -> subscriptionJsonResponse;
         SubscriptionController subscriptionController = new SubscriptionController(subscriptionService);

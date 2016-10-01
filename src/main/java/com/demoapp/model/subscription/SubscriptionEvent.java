@@ -10,10 +10,17 @@ public class SubscriptionEvent implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String type;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "marketplace_fk")
     private Marketplace marketplace;
-    @Column(columnDefinition = "BINARY(1023)")
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "creator_fk", referencedColumnName = "uuid")
     private Creator creator;
-    @Column(columnDefinition = "BINARY(1023)")
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "payload_fk")
     private Payload payload;
 
     public Long getId() {
@@ -26,6 +33,30 @@ public class SubscriptionEvent implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Marketplace getMarketplace() {
+        return marketplace;
+    }
+
+    public void setMarketplace(Marketplace marketplace) {
+        this.marketplace = marketplace;
+    }
+
+    public Creator getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Creator creator) {
+        this.creator = creator;
+    }
+
+    public Payload getPayload() {
+        return payload;
+    }
+
+    public void setPayload(Payload payload) {
+        this.payload = payload;
     }
 
     @Override

@@ -50,4 +50,13 @@ public class SubscriptionController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(subscriptionChangeService.changeSubscription(eventUrl), httpHeaders, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/cancel", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<SubscriptionJsonResponse> cancel(@RequestParam(value = "eventUrl") String eventUrl){
+        LOGGER.log(Level.INFO, "Processing create request: " + eventUrl);
+        final HttpHeaders httpHeaders= new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(SubscriptionJsonResponse.getSuccessResponse(""), httpHeaders, HttpStatus.OK);
+        //return new ResponseEntity<>(subscriptionCancelService.cancelSubscription(eventUrl), httpHeaders, HttpStatus.OK);
+    }
 }

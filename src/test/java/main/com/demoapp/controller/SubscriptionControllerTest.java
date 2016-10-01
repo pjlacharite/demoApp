@@ -3,7 +3,8 @@ package main.com.demoapp.controller;
 import com.demoapp.Application;
 import com.demoapp.controller.SubscriptionController;
 import com.demoapp.controller.response.SubscriptionJsonResponse;
-import com.demoapp.service.SubscriptionService;
+import com.demoapp.service.SubscriptionChangeService;
+import com.demoapp.service.SubscriptionCreationService;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,8 +74,9 @@ public class SubscriptionControllerTest {
                     SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL,
                     SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR);
         }
-        SubscriptionService subscriptionService = eventUrl -> subscriptionJsonResponse;
-        SubscriptionController subscriptionController = new SubscriptionController(subscriptionService);
+        SubscriptionCreationService subscriptionCreationService = eventUrl -> subscriptionJsonResponse;
+        SubscriptionChangeService subscriptionChangeService  = eventUrl -> subscriptionJsonResponse;
+        SubscriptionController subscriptionController = new SubscriptionController(subscriptionCreationService, subscriptionChangeService);
         return MockMvcBuilders.standaloneSetup(subscriptionController).build();
     }
 

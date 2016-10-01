@@ -1,7 +1,8 @@
 package com.demoapp.controller;
 
 import com.demoapp.controller.response.SubscriptionJsonResponse;
-import com.demoapp.service.SubscriptionService;
+import com.demoapp.service.SubscriptionChangeService;
+import com.demoapp.service.SubscriptionCreationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,15 @@ public class SubscriptionController {
     private static final Logger LOGGER = Logger.getLogger(SubscriptionController.class);
 
     @Autowired
-    private SubscriptionService subscriptionService;
+    private SubscriptionCreationService subscriptionCreationService;
 
     @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService) {
-        this.subscriptionService = subscriptionService;
+    private SubscriptionChangeService subscriptionChangeService;
+
+    @Autowired
+    public SubscriptionController(SubscriptionCreationService subscriptionCreationService, SubscriptionChangeService subscriptionChangeService) {
+        this.subscriptionCreationService = subscriptionCreationService;
+        this.subscriptionChangeService = subscriptionChangeService;
     }
 
     @RequestMapping(value = "/create", method = GET, produces = APPLICATION_JSON_VALUE)
@@ -34,7 +39,7 @@ public class SubscriptionController {
         LOGGER.log(Level.INFO, "Processing create request: " + eventUrl);
         final HttpHeaders httpHeaders= new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(subscriptionService.createSubscription(eventUrl), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionCreationService.createSubscription(eventUrl), httpHeaders, HttpStatus.OK);
     }
 
 
@@ -43,6 +48,6 @@ public class SubscriptionController {
         LOGGER.log(Level.INFO, "Processing create request: " + eventUrl);
         final HttpHeaders httpHeaders= new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(subscriptionService.changeSubscription(eventUrl), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionChangeService.changeSubscription(eventUrl), httpHeaders, HttpStatus.OK);
     }
 }

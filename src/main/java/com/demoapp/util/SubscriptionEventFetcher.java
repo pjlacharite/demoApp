@@ -38,7 +38,7 @@ public class SubscriptionEventFetcher{
         this.secret = secret;
     }
 
-    public SubscriptionEvent fetchSubscriptionJsonResponse(String eventUrl) throws SubscriptionEventException {
+    public SubscriptionEvent  fetchSubscriptionJsonResponse(String eventUrl) throws SubscriptionEventException {
         String errorCode = SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR;
         String[] schemes = {"http", "https"};
         UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_LOCAL_URLS);

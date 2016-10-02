@@ -2,8 +2,8 @@ package main.com.demoapp.controller;
 
 import com.demoapp.controller.SubscriptionController;
 import com.demoapp.controller.response.SubscriptionJsonResponse;
-import com.demoapp.service.SubscriptionChangeService;
-import com.demoapp.service.SubscriptionCreationService;
+import com.demoapp.service.subscription.SubscriptionChangeService;
+import com.demoapp.service.subscription.SubscriptionCreationService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 

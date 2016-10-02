@@ -1,4 +1,4 @@
-package com.demoapp.service;
+package com.demoapp.service.subscription;
 
 import com.demoapp.controller.response.SubscriptionJsonResponse;
 

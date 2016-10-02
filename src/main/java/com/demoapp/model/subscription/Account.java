@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Entity
 public class Account implements Serializable{
     public static final transient String ACCOUNT_ACTIVE = "ACTIVE";
+    public static final transient String ACCOUNT_CANCELLED = "CANCELLED";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

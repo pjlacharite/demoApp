@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Optional;
-
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
@@ -21,14 +19,13 @@ public class AccountServiceTest {
     @Autowired
     private AccountService accountService;
 
-
     @Test
     public void testFindByAccountIdentifier() {
         Account account = new Account();
         account.setAccountIdentifier("123");
         accountService.save(account);
-        Optional<Account> accountRetrieved = accountService.findByAccountIdentifier("123");
-        assertTrue("Should find an account with this identifier", accountRetrieved.isPresent());
+        Account accountRetrieved = accountService.findByAccountIdentifier("123");
+        assertTrue("Should find an account with this identifier", accountRetrieved != null);
     }
 
     @Test

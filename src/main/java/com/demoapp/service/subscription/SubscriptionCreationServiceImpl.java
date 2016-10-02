@@ -1,20 +1,22 @@
-package com.demoapp.service;
+package com.demoapp.service.subscription;
 
 import com.demoapp.controller.response.SubscriptionJsonResponse;
 import com.demoapp.exception.SubscriptionEventException;
 import com.demoapp.model.subscription.Account;
 import com.demoapp.model.subscription.SubscriptionEvent;
 import com.demoapp.repository.SubscriptionEventRepository;
+import com.demoapp.service.AccountService;
+import com.demoapp.util.SubscriptionEventFetcher;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SubscriptionCreationServiceImpl extends SubscriptionService implements SubscriptionCreationService {
+public class SubscriptionCreationServiceImpl implements SubscriptionCreationService {
 
     private static final Logger LOGGER = Logger.getLogger(SubscriptionCreationServiceImpl.class);
 
@@ -22,6 +24,12 @@ public class SubscriptionCreationServiceImpl extends SubscriptionService impleme
     private SubscriptionEventRepository subscriptionEventRepository;
     @Autowired
     private AccountService accountService;
+
+    @Value("${oauth.consumer-key}")
+    private String consumerKey;
+
+    @Value("${oauth.secret}")
+    private String secret;
 
     public SubscriptionCreationServiceImpl(AccountService accountService){
         this.accountService = accountService;
@@ -31,10 +39,18 @@ public class SubscriptionCreationServiceImpl extends SubscriptionService impleme
     public SubscriptionJsonResponse createSubscription(String eventUrl) {
         SubscriptionEvent subscriptionCreate;
         try {
-            subscriptionCreate = getSubscriptionEvent(eventUrl);
+            subscriptionCreate = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
             LOGGER.log(Level.INFO, "Subscription Event - Create: " + subscriptionCreate);
-            if (validateCreateSubscription(subscriptionCreate)) {
-                Account account = new Account(UUID.randomUUID().toString(), Account.ACCOUNT_ACTIVE);
+            Account account = null;
+            if (subscriptionCreate.getPayload().getAccount() != null){
+                account = accountService.findByAccountIdentifier(subscriptionCreate.getPayload().getAccount().getAccountIdentifier());
+            }
+            if (account == null || Account.ACCOUNT_CANCELLED.equals(account.getStatus())) {
+                if (account == null){
+                    account = new Account(UUID.randomUUID().toString(), Account.ACCOUNT_ACTIVE);
+                }else{
+                    account.setStatus(Account.ACCOUNT_ACTIVE);
+                }
                 accountService.save(account);
                 subscriptionEventRepository.save(subscriptionCreate);
                 return SubscriptionJsonResponse.getSuccessResponse(account.getAccountIdentifier());
@@ -45,21 +61,5 @@ public class SubscriptionCreationServiceImpl extends SubscriptionService impleme
             LOGGER.log(Level.WARN, "Could not process Create Subscription Event", e);
             return SubscriptionJsonResponse.getFailureResponse(e.getErrorMessage(), e.getErrorCode());
         }
-    }
-
-
-    /**
-     * Validate that an account doesn't already exists.
-     *
-     * @param subscriptionEvent SuscriptionEvent retrieved from eventUrl
-     * @return boolean
-     */
-    private boolean validateCreateSubscription(SubscriptionEvent subscriptionEvent) {
-        if (subscriptionEvent.getPayload().getAccount() != null) {
-            System.out.println("AccountService: " + accountService);
-            Optional<Account> account = accountService.findByAccountIdentifier(subscriptionEvent.getPayload().getAccount().getAccountIdentifier());
-            return (!account.isPresent());
-        }
-        return true;
     }
 }

@@ -14,8 +14,9 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Override
-    public Optional<Account> findByAccountIdentifier(String accountIdentifier) {
-        return accountRepository.findByAccountIdentifier(accountIdentifier);
+    public Account findByAccountIdentifier(String accountIdentifier) {
+        Optional<Account> account = accountRepository.findByAccountIdentifier(accountIdentifier);
+        return (account.isPresent()? account.get(): null);
     }
 
     @Override

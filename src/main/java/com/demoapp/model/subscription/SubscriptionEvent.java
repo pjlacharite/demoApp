@@ -16,7 +16,7 @@ public class SubscriptionEvent implements Serializable {
     private Marketplace marketplace;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "creator_fk", referencedColumnName = "uuid")
+    @JoinColumn(name = "creator_fk")
     private Creator creator;
 
     @ManyToOne(cascade = {CascadeType.ALL})

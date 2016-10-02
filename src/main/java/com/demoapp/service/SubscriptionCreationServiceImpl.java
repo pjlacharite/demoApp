@@ -66,7 +66,7 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
             Optional<Account> account = accountRepository.findByAccountIdentifier(subscriptionEvent.getPayload().getAccount().getAccountIdentifier());
             return (!account.isPresent());
         }
-        return false;
+        return true;
     }
 
 

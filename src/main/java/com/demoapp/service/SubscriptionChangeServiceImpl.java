@@ -36,9 +36,11 @@ public class SubscriptionChangeServiceImpl implements SubscriptionChangeService 
         try {
             subscriptionChange = new SubscriptionEventFetcher(eventUrl, consumerKey, secret).fetchSubscriptionJsonResponse();
             LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionChange);
-            if (validateChangeSubscription(subscriptionChange)) {
-                SubscriptionEvent savedSubscriptionEvent = subscriptionEventRepository.save(subscriptionChange);
-                return SubscriptionJsonResponse.getSuccessResponse(savedSubscriptionEvent.getPayload().getAccount().getAccountIdentifier());
+            Account currentAccount = getAccountIfExists(subscriptionChange);
+            if (currentAccount != null) {
+                accountService.update(subscriptionChange.getPayload().getAccount());
+                subscriptionEventRepository.save(subscriptionChange);
+                return SubscriptionJsonResponse.getSuccessResponse(currentAccount.getAccountIdentifier());
             } else {
                 return SubscriptionJsonResponse.getFailureResponse(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, SubscriptionJsonResponse.ERROR_CODE_ACCOUNT_NOT_FOUND);
             }
@@ -52,8 +54,8 @@ public class SubscriptionChangeServiceImpl implements SubscriptionChangeService 
      * @param subscriptionEvent SubscriptionEvent retrieved from eventUrl
      * @return Account
      */
-    private boolean validateChangeSubscription(SubscriptionEvent subscriptionEvent) {
+    private Account getAccountIfExists(SubscriptionEvent subscriptionEvent) {
         Optional<Account> account = accountService.findByAccountIdentifier(subscriptionEvent.getPayload().getAccount().getAccountIdentifier());
-        return (account.isPresent());
+        return (account.get());
     }
 }

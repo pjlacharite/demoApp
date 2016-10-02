@@ -15,8 +15,8 @@ public class Payload implements Serializable {
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "order_fk")
     private Order order;
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "account_fk")
+
+    @Transient
     private Account account;
 
     public Company getCompany() {

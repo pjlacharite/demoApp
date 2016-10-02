@@ -6,6 +6,9 @@ import java.io.Serializable;
 @Entity
 public class Creator implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "address_fk")
     private Address address;
@@ -14,22 +17,17 @@ public class Creator implements Serializable {
     private String language;
     private String locale;
     private String openId;
-    @Id
     private String uuid;
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public Long getId() {
+        return id;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Creator) {
             Creator creator = (Creator) obj;
-            return creator.getUuid().equals(this.getUuid());
+            return creator.getId().equals(this.getId());
         }
         return super.equals(obj);
     }

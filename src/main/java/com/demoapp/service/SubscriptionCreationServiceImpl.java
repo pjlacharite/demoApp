@@ -3,9 +3,8 @@ package com.demoapp.service;
 import com.demoapp.controller.response.SubscriptionJsonResponse;
 import com.demoapp.exception.SubscriptionEventException;
 import com.demoapp.model.subscription.Account;
-import com.demoapp.model.subscription.Creator;
 import com.demoapp.model.subscription.SubscriptionEvent;
-import com.demoapp.repository.CreatorRepository;
+import com.demoapp.repository.AccountRepository;
 import com.demoapp.repository.SubscriptionEventRepository;
 import com.demoapp.util.SubscriptionEventFetcher;
 import org.apache.log4j.Level;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,7 +26,7 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
     @Autowired
     private SubscriptionEventRepository subscriptionEventRepository;
     @Autowired
-    private CreatorRepository creatorRepository;
+    private AccountRepository accountRepository;
 
     @Value("${oauth.consumer-key}")
     private String consumerKey;
@@ -56,14 +56,17 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
 
 
     /**
-     * Validate that a subscription wasn't already created for this Creator.
+     * Validate that an account doesn't already exists.
      *
      * @param subscriptionEvent SuscriptionEvent retrieved from eventUrl
      * @return boolean
      */
     private boolean validateCreateSubscription(SubscriptionEvent subscriptionEvent) {
-        Creator creator = creatorRepository.findOne(subscriptionEvent.getCreator().getUuid());
-        return (creator == null);
+        if (subscriptionEvent.getPayload().getAccount() != null) {
+            Optional<Account> account = accountRepository.findByAccountIdentifier(subscriptionEvent.getPayload().getAccount().getAccountIdentifier());
+            return (!account.isPresent());
+        }
+        return false;
     }
 
 

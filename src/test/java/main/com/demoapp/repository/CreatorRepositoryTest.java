@@ -22,25 +22,22 @@ public class CreatorRepositoryTest {
     @Test
     public void testSave() {
         Creator creator = new Creator();
-        creator.setUuid("30d1ce50-3cc1-46f5-89f3-aa0f19fec18c");
         assertEquals("Creator should be saved", creator, creatorRepository.save(creator));
     }
 
     @Test
     public void testFindOne() {
         Creator creatorToSave = new Creator();
-        creatorToSave.setUuid("30d1ce50-3cc1-46f5-89f3-aa0f19fec18c");
         Creator savedCreator = creatorRepository.save(creatorToSave);
-        Creator retrievedCreator = creatorRepository.findOne(savedCreator.getUuid());
+        Creator retrievedCreator = creatorRepository.findOne(savedCreator.getId());
         assertEquals("Should be able to retrieve creator by its id", retrievedCreator, savedCreator);
     }
 
     @Test
     public void testDelete() {
         Creator creatorToSave = new Creator();
-        creatorToSave.setUuid("30d1ce50-3cc1-46f5-89f3-aa0f19fec18c");
         Creator savedCreator = creatorRepository.save(creatorToSave);
-        creatorRepository.delete(savedCreator.getUuid());
-        assertTrue("Creator should be deleted", creatorRepository.findOne(savedCreator.getUuid()) == null);
+        creatorRepository.delete(savedCreator.getId());
+        assertTrue("Creator should be deleted", creatorRepository.findOne(savedCreator.getId()) == null);
     }
 }

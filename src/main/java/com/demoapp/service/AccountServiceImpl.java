@@ -8,14 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository){
-        this.accountRepository = accountRepository;
-    }
     @Override
     public Optional<Account> findByAccountIdentifier(String accountIdentifier) {
         return accountRepository.findByAccountIdentifier(accountIdentifier);
@@ -24,7 +21,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account update(Account account) {
         Optional<Account> current = accountRepository.findByAccountIdentifier(account.getAccountIdentifier());
-        if (current ==  null){
+        if (current == null) {
             return null;
         }
         Account currentAccount = current.get();

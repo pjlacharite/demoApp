@@ -5,36 +5,26 @@ import com.demoapp.exception.SubscriptionEventException;
 import com.demoapp.model.subscription.Account;
 import com.demoapp.model.subscription.SubscriptionEvent;
 import com.demoapp.repository.SubscriptionEventRepository;
-import com.demoapp.util.SubscriptionEventFetcher;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@Configuration
-public class SubscriptionChangeServiceImpl implements SubscriptionChangeService {
+public class SubscriptionChangeServiceImpl extends SubscriptionService implements SubscriptionChangeService {
     private static final Logger LOGGER = Logger.getLogger(SubscriptionChangeServiceImpl.class);
     @Autowired
     private SubscriptionEventRepository subscriptionEventRepository;
     @Autowired
     private AccountServiceImpl accountService;
 
-    @Value("${oauth.consumer-key}")
-    private String consumerKey;
-
-    @Value("${oauth.secret}")
-    private String secret;
-
     @Override
     public SubscriptionJsonResponse changeSubscription(String eventUrl) {
         SubscriptionEvent subscriptionChange;
         try {
-            subscriptionChange = new SubscriptionEventFetcher(eventUrl, consumerKey, secret).fetchSubscriptionJsonResponse();
+            subscriptionChange = getSubscriptionEvent(eventUrl);
             LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionChange);
             Account currentAccount = getAccountIfExists(subscriptionChange);
             if (currentAccount != null) {
@@ -48,6 +38,7 @@ public class SubscriptionChangeServiceImpl implements SubscriptionChangeService 
             return SubscriptionJsonResponse.getFailureResponse(e.getErrorMessage(), e.getErrorCode());
         }
     }
+
     /**
      * Validates that an Account exists for the account identifier.
      *
@@ -56,6 +47,9 @@ public class SubscriptionChangeServiceImpl implements SubscriptionChangeService 
      */
     private Account getAccountIfExists(SubscriptionEvent subscriptionEvent) {
         Optional<Account> account = accountService.findByAccountIdentifier(subscriptionEvent.getPayload().getAccount().getAccountIdentifier());
-        return (account.get());
+        if (account.isPresent()) {
+            return (account.get());
+        }
+        return null;
     }
 }

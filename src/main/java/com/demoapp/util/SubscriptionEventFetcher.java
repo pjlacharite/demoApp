@@ -27,20 +27,18 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-public class SubscriptionEventFetcher {
+public class SubscriptionEventFetcher{
 
     private static final Logger LOGGER = Logger.getLogger(SubscriptionEventFetcher.class);
-    private String eventUrl;
     private String consumerKey;
     private String secret;
 
-    public SubscriptionEventFetcher(String eventUrl, String consumerKey, String secret) {
-        this.eventUrl = eventUrl;
+    public SubscriptionEventFetcher(String consumerKey, String secret) {
         this.consumerKey = consumerKey;
         this.secret = secret;
     }
 
-    public SubscriptionEvent fetchSubscriptionJsonResponse() throws SubscriptionEventException {
+    public SubscriptionEvent fetchSubscriptionJsonResponse(String eventUrl) throws SubscriptionEventException {
         String errorCode = SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR;
         String[] schemes = {"http", "https"};
         UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_LOCAL_URLS);

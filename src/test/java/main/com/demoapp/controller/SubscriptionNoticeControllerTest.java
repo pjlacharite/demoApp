@@ -1,14 +1,9 @@
 package main.com.demoapp.controller;
 
-import com.demoapp.Application;
 import com.demoapp.controller.response.SubscriptionJsonResponse;
 import com.google.gson.Gson;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,16 +11,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-public class SubscriptionControllerCreateTest extends SubscriptionControllerTest {
-
+public class SubscriptionNoticeControllerTest extends SubscriptionControllerTest {
     @Test
     public void testSubscriptionCreateSuccess() throws Exception {
         MockMvc mockMvc = getMockMvc(true);
         MockHttpServletRequestBuilder mockHttpServletRequestBuilder =
-                MockMvcRequestBuilders.get("/subscription/create")
+                MockMvcRequestBuilders.get("/subscription/notice")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .param("eventUrl", "http://appdirect/event/12345");
         mockMvc.perform(mockHttpServletRequestBuilder)
@@ -37,7 +28,7 @@ public class SubscriptionControllerCreateTest extends SubscriptionControllerTest
     public void testSubscriptionCreateBadRequest() throws Exception {
         MockMvc mockMvc = getMockMvc(false);
         MockHttpServletRequestBuilder mockHttpServletRequestBuilder =
-                MockMvcRequestBuilders.get("/subscription/create")
+                MockMvcRequestBuilders.get("/subscription/notice")
                         .accept(MediaType.APPLICATION_JSON_UTF8);
         mockMvc.perform(mockHttpServletRequestBuilder)
                 .andExpect(status().isBadRequest());
@@ -50,7 +41,7 @@ public class SubscriptionControllerCreateTest extends SubscriptionControllerTest
                 SubscriptionJsonResponse.ERROR_CODE_UNKNOWN_ERROR);
         MockMvc mockMvc = getMockMvc(false);
         MockHttpServletRequestBuilder mockHttpServletRequestBuilder =
-                MockMvcRequestBuilders.get("/subscription/create")
+                MockMvcRequestBuilders.get("/subscription/notice")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .param("eventUrl", "http://appdirect/event/incorrectevent");
         mockMvc.perform(mockHttpServletRequestBuilder)

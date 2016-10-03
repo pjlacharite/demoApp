@@ -47,12 +47,7 @@ public class SubscriptionEventFetcher{
             throw new SubscriptionEventException(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, errorCode);
         }
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(eventUrl).openConnection();
-            connection.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-            connection.setRequestProperty(ACCEPT, APPLICATION_JSON_VALUE);
-            connection.setRequestMethod(GET.name());
-            OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
-            consumer.sign(connection);
+            HttpURLConnection connection = getConnection(eventUrl);
             switch (connection.getResponseCode()) {
                 case HttpURLConnection.HTTP_OK:
                     LOGGER.log(Level.INFO, "Request to EventUrl " + eventUrl + " returned " + HttpURLConnection.HTTP_OK);
@@ -96,5 +91,15 @@ public class SubscriptionEventFetcher{
         }
         LOGGER.log(Level.WARN, "Request to eventURL could not be processed because of error: " + errorCode);
         throw new SubscriptionEventException(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, errorCode);
+    }
+
+    private HttpURLConnection getConnection(String eventUrl) throws IOException, OAuthCommunicationException, OAuthExpectationFailedException, OAuthMessageSignerException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(eventUrl).openConnection();
+        connection.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON_VALUE);
+        connection.setRequestProperty(ACCEPT, APPLICATION_JSON_VALUE);
+        connection.setRequestMethod(GET.name());
+        OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
+        consumer.sign(connection);
+        return connection;
     }
 }

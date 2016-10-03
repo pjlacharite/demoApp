@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SubscriptionCancelServiceImpl implements SubscriptionCancelService {
-    private static final Logger LOGGER = Logger.getLogger(SubscriptionCancelServiceImpl.class);
+public class SubscriptionNoticeServiceImpl implements SubscriptionNoticeService {
+    private static final Logger LOGGER = Logger.getLogger(SubscriptionNoticeServiceImpl.class);
 
     @Autowired
     private SubscriptionEventRepository subscriptionEventRepository;
@@ -28,15 +28,15 @@ public class SubscriptionCancelServiceImpl implements SubscriptionCancelService 
     @Value("${oauth.secret}")
     private String secret;
 
+
     @Override
-    public SubscriptionJsonResponse cancelSubscription(String eventUrl) {
+    public SubscriptionJsonResponse noticeSubscription(String eventUrl) {
         SubscriptionEvent subscriptionChange;
         try {
             subscriptionChange = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
             LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionChange);
             Account currentAccount = accountService.findByAccountIdentifier(subscriptionChange.getPayload().getAccount().getAccountIdentifier());
             if (currentAccount != null) {
-                currentAccount.setStatus(Account.ACCOUNT_CANCELLED);
                 accountService.update(subscriptionChange.getPayload().getAccount());
                 subscriptionEventRepository.save(subscriptionChange);
                 return SubscriptionJsonResponse.getSuccessResponse(currentAccount.getAccountIdentifier());

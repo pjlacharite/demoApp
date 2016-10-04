@@ -4,10 +4,10 @@
 Demo Application tied to the AppDirect API.
 
 Currently supported APIs
-    1. Subscription Create /subscription/create?eventUrl={eventUrl}
-    2. Subscription Change /subscription/change?eventUrl={eventUrl}
-    3. Subscription Notice /subscription/notice?eventUrl={eventUrl}
-    4. Subscription Cancel /subscription/cancel?eventUrl={eventUrl}
+1. Subscription Create /subscription/create?eventUrl={eventUrl}
+2. Subscription Change /subscription/change?eventUrl={eventUrl}
+3. Subscription Notice /subscription/notice?eventUrl={eventUrl}
+4. Subscription Cancel /subscription/cancel?eventUrl={eventUrl}
 
 # Running the application
 

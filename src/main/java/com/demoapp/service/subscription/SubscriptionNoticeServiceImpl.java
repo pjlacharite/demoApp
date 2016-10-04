@@ -35,12 +35,12 @@ public class SubscriptionNoticeServiceImpl implements SubscriptionNoticeService 
         SubscriptionEvent subscriptionNotice;
         try {
             subscriptionNotice = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
-            LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionNotice);
+            LOGGER.log(Level.INFO, "Subscription Event - Notice: " + subscriptionNotice);
             Account currentAccount = accountService.findByAccountIdentifier(subscriptionNotice.getPayload().getAccount().getAccountIdentifier());
             Notice notice = subscriptionNotice.getPayload().getNotice();
             if (currentAccount != null && notice != null) {
                 currentAccount = applyNoticeToAccount(notice, currentAccount);
-                accountService.update(subscriptionNotice.getPayload().getAccount());
+                accountService.update(currentAccount);
                 subscriptionEventRepository.save(subscriptionNotice);
                 return SubscriptionJsonResponse.getSuccessResponse(currentAccount.getAccountIdentifier());
             } else {

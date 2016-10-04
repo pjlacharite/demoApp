@@ -33,11 +33,11 @@ public class SubscriptionCancelServiceImpl implements SubscriptionCancelService 
         SubscriptionEvent subscriptionCancel;
         try {
             subscriptionCancel = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
-            LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionCancel);
+            LOGGER.log(Level.INFO, "Subscription Event - Cancel: " + subscriptionCancel);
             Account currentAccount = accountService.findByAccountIdentifier(subscriptionCancel.getPayload().getAccount().getAccountIdentifier());
             if (currentAccount != null) {
                 currentAccount.setStatus(Account.ACCOUNT_CANCELLED);
-                accountService.update(subscriptionCancel.getPayload().getAccount());
+                accountService.update(currentAccount);
                 subscriptionEventRepository.save(subscriptionCancel);
                 return SubscriptionJsonResponse.getSuccessResponse(currentAccount.getAccountIdentifier());
             } else {

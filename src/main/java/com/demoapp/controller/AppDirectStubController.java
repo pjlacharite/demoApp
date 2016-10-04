@@ -12,7 +12,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class AppDirectStubController {
     private static final Logger LOGGER = Logger.getLogger(AppDirectStubController.class);
 
-    @RequestMapping(value = "/test", method = GET, produces = APPLICATION_JSON_VALUE)
+    /**
+     * Allows local tests by calling http://localhost:8080/subscription/create?eventUrl=http://localhost:8080/test-create
+     * @return String
+     */
+    @RequestMapping(value = "/test-create", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String test() {
         return "{     \"type\": \"SUBSCRIPTION_ORDER\",\n" +
@@ -49,6 +53,10 @@ public class AppDirectStubController {
                 "  }";
     }
 
+    /**
+     * Allows local tests by calling http://localhost:8080/subscription/change?eventUrl=http://localhost:8080/test-change
+     * @return String
+     */
     @RequestMapping(value = "/test-change", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String change() {
@@ -79,7 +87,7 @@ public class AppDirectStubController {
                 "    },\n" +
                 "    \"payload\": {\n" +
                 "      \"account\": {\n" +
-                "        \"accountIdentifier\": \"206123\",\n" +
+                "        \"accountIdentifier\": \"a3f72246-5377-4d92-8bdc-b1b6b450c55c\",\n" +
                 "        \"status\": \"ACTIVE\"\n" +
                 "      },\n" +
                 "      \"order\": {\n" +
@@ -93,5 +101,70 @@ public class AppDirectStubController {
                 "    }\n" +
                 "}\n" +
                 "\n";
+    }
+
+    /**
+     * Allows local tests by calling http://localhost:8080/subscription/notice?eventUrl=http://localhost:8080/test-notice
+     * @return String
+     */
+    @RequestMapping(value = "/test-notice", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String notice() {
+        return "{\n" +
+                "    \"type\": \"SUBSCRIPTION_NOTICE\",\n" +
+                "    \"marketplace\": {\n" +
+                "      \"baseUrl\": \"https://www.acme.com\",\n" +
+                "      \"partner\": \"APPDIRECT\"\n" +
+                "    },\n" +
+                "    \"payload\": {\n" +
+                "      \"account\": {\n" +
+                "        \"accountIdentifier\": \"a3f72246-5377-4d92-8bdc-b1b6b450c55c\",\n" +
+                "        \"status\": \"ACTIVE\"\n" +
+                "      },\n" +
+                "      \"notice\": { \"type\": \"CLOSED\" }\n" +
+                "    }\n" +
+                "}\n";
+    }
+
+    /**
+     * Allows local tests by calling http://localhost:8080/subscription/cancel?eventUrl=http://localhost:8080/test-cancel
+     * @return String
+     */
+    @RequestMapping(value = "/test-cancel", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String cancel() {
+        return "{\n" +
+                "    \"type\": \"SUBSCRIPTION_CANCEL\",\n" +
+                "    \"marketplace\": {\n" +
+                "      \"baseUrl\": \"https://www.acme.com\",\n" +
+                "      \"partner\": \"APPDIRECT\"\n" +
+                "    },\n" +
+                "    \"creator\": {\n" +
+                "      \"address\": {\n" +
+                "        \"city\": \"Sommerville\",\n" +
+                "        \"country\": \"US\",\n" +
+                "        \"firstName\": \"Test\",\n" +
+                "        \"fullName\": \"Test User\",\n" +
+                "        \"lastName\": \"User\",\n" +
+                "        \"phone\": \"5305556465\",\n" +
+                "        \"state\": \"MA\",\n" +
+                "        \"street1\": \"55 Grove St\",\n" +
+                "        \"zip\": \"02144\"\n" +
+                "      },\n" +
+                "      \"email\": \"testuser@testco.com\",\n" +
+                "      \"firstName\": \"Test\",\n" +
+                "      \"language\": \"en\",\n" +
+                "      \"lastName\": \"User\",\n" +
+                "      \"locale\": \"en_US\",\n" +
+                "      \"openId\": \"https://www.acme.com/openid/id/d124bf8b-0b0b-40d3-831b-b7f5a514d487\",\n" +
+                "      \"uuid\": \"d124bf8b-0b0b-40d3-831b-b7f5a514d487\"\n" +
+                "    },\n" +
+                "    \"payload\": {\n" +
+                "      \"account\": {\n" +
+                "        \"accountIdentifier\": \"a3f72246-5377-4d92-8bdc-b1b6b450c55c\",\n" +
+                "        \"status\": \"ACTIVE\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "}";
     }
 }

@@ -44,6 +44,8 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
             if (account == null || Account.ACCOUNT_CANCELLED.equals(account.getStatus())) {
                 if (account == null){
                     account = new Account(UUID.randomUUID().toString(), Account.ACCOUNT_ACTIVE);
+                    //Uncomment following line to use AppDirectStubController
+                    //account = new Account("a3f72246-5377-4d92-8bdc-b1b6b450c55c", Account.ACCOUNT_ACTIVE);
                 }else{
                     account.setStatus(Account.ACCOUNT_ACTIVE);
                 }

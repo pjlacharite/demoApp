@@ -22,10 +22,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account update(Account account) {
         Optional<Account> current = accountRepository.findByAccountIdentifier(account.getAccountIdentifier());
-        if (current == null) {
+        if (current == null || !current.isPresent()) {
             return null;
         }
         Account currentAccount = current.get();
+
+        currentAccount.setAccountOrder(account.getAccountOrder());
         currentAccount.setStatus(account.getStatus());
         return accountRepository.save(currentAccount);
     }

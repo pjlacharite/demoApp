@@ -1,21 +1,22 @@
 package com.demoapp.model.subscription;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class Account implements Serializable{
+    public static final transient String ACCOUNT_FREE_TRIAL = "FREE_TRIAL";
+    public static final transient String ACCOUNT_FREE_TRIAL_EXPIRED = "FREE_TRIAL_EXPIRED";
     public static final transient String ACCOUNT_ACTIVE = "ACTIVE";
+    public static final transient String ACCOUNT_SUSPENDED = "SUSPENDED";
     public static final transient String ACCOUNT_CANCELLED = "CANCELLED";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String accountIdentifier;
-    String status;
+    private Long id;
+    private String accountIdentifier;
+    private String status;
+    private Order accountOrder;
 
     public Account(){
         super();
@@ -40,6 +41,14 @@ public class Account implements Serializable{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Order getAccountOrder() {
+        return accountOrder;
+    }
+
+    public void setAccountOrder(Order accountOrder) {
+        this.accountOrder = accountOrder;
     }
 
     @Override

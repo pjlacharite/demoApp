@@ -2,6 +2,7 @@ package main.com.demoapp.repository;
 
 import com.demoapp.Application;
 import com.demoapp.model.subscription.Account;
+import com.demoapp.model.subscription.Order;
 import com.demoapp.service.AccountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,16 +38,30 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdate() {
+        Order order = new Order();
+        order.setPricingDuration("MONTHLY");
+        order.setEditionCode("FREE");
+
         Account account = new Account();
         account.setAccountIdentifier("123");
-        account.setAccountIdentifier("INACTIVE");
+        account.setAccountIdentifier("FREE_TRIAL");
+        account.setAccountOrder(order);
+
         Account savedAccount = accountService.save(account);
         assertEquals("Account should be saved", account, savedAccount);
+
+        Order changedOrder = new Order();
+        changedOrder.setEditionCode("ULTIMATE");
+        changedOrder.setPricingDuration("ANNUALLY");
+
         Account changedAccount = new Account();
         changedAccount.setAccountIdentifier("123");
         changedAccount.setStatus("ACTIVE");
+        changedAccount.setAccountOrder(changedOrder);
         Account updatedAccount = accountService.update(changedAccount);
-        assertTrue("Account should be update with status active", "ACTIVE".equals(updatedAccount.getStatus()));
+        assertTrue("Account should be update with status ACTIVE", Account.ACCOUNT_ACTIVE.equals(updatedAccount.getStatus()));
+        assertTrue("Order should be update with edition code ULTIMATE", "ULTIMATE".equals(updatedAccount.getAccountOrder().getEditionCode()));
+        assertTrue("Order should be update with pricing duration ANNUALLY", "ANNUALLY".equals(updatedAccount.getAccountOrder().getPricingDuration()));
     }
 
 }

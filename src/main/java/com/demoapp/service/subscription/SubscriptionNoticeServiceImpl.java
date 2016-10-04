@@ -3,6 +3,7 @@ package com.demoapp.service.subscription;
 import com.demoapp.controller.response.SubscriptionJsonResponse;
 import com.demoapp.exception.SubscriptionEventException;
 import com.demoapp.model.subscription.Account;
+import com.demoapp.model.subscription.Notice;
 import com.demoapp.model.subscription.SubscriptionEvent;
 import com.demoapp.repository.SubscriptionEventRepository;
 import com.demoapp.service.AccountService;
@@ -31,14 +32,16 @@ public class SubscriptionNoticeServiceImpl implements SubscriptionNoticeService 
 
     @Override
     public SubscriptionJsonResponse noticeSubscription(String eventUrl) {
-        SubscriptionEvent subscriptionChange;
+        SubscriptionEvent subscriptionNotice;
         try {
-            subscriptionChange = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
-            LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionChange);
-            Account currentAccount = accountService.findByAccountIdentifier(subscriptionChange.getPayload().getAccount().getAccountIdentifier());
-            if (currentAccount != null) {
-                accountService.update(subscriptionChange.getPayload().getAccount());
-                subscriptionEventRepository.save(subscriptionChange);
+            subscriptionNotice = new SubscriptionEventFetcher(consumerKey, secret).fetchSubscriptionJsonResponse(eventUrl);
+            LOGGER.log(Level.INFO, "Subscription Event - Change: " + subscriptionNotice);
+            Account currentAccount = accountService.findByAccountIdentifier(subscriptionNotice.getPayload().getAccount().getAccountIdentifier());
+            Notice notice = subscriptionNotice.getPayload().getNotice();
+            if (currentAccount != null && notice != null) {
+                currentAccount = applyNoticeToAccount(notice, currentAccount);
+                accountService.update(subscriptionNotice.getPayload().getAccount());
+                subscriptionEventRepository.save(subscriptionNotice);
                 return SubscriptionJsonResponse.getSuccessResponse(currentAccount.getAccountIdentifier());
             } else {
                 return SubscriptionJsonResponse.getFailureResponse(SubscriptionJsonResponse.ERROR_MESSAGE_GENERAL, SubscriptionJsonResponse.ERROR_CODE_ACCOUNT_NOT_FOUND);
@@ -46,5 +49,27 @@ public class SubscriptionNoticeServiceImpl implements SubscriptionNoticeService 
         } catch (SubscriptionEventException e) {
             return SubscriptionJsonResponse.getFailureResponse(e.getErrorMessage(), e.getErrorCode());
         }
+    }
+
+    private Account applyNoticeToAccount(Notice notice, Account account){
+        switch(notice.getType()){
+            case Notice.NOTICE_CLOSED:
+                account.setStatus(Account.ACCOUNT_CANCELLED);
+                break;
+            case Notice.NOTICE_DEACTIVATED:
+                if (Account.ACCOUNT_FREE_TRIAL.equals(account.getStatus())) {
+                    account.setStatus(Account.ACCOUNT_FREE_TRIAL_EXPIRED);
+                }else{
+                    account.setStatus(Account.ACCOUNT_SUSPENDED);
+                }
+                break;
+            case Notice.NOTICE_REACTIVATED:
+                account.setStatus(Account.ACCOUNT_ACTIVE);
+                break;
+            case Notice.NOTICE_UPCOMING_INVOICE:
+                //Nothing to do here for now.
+                break;
+        }
+        return account;
     }
 }

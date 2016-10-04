@@ -31,10 +31,6 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
     @Value("${oauth.secret}")
     private String secret;
 
-    public SubscriptionCreationServiceImpl(AccountService accountService){
-        this.accountService = accountService;
-    }
-
     @Override
     public SubscriptionJsonResponse createSubscription(String eventUrl) {
         SubscriptionEvent subscriptionCreate;
@@ -51,6 +47,7 @@ public class SubscriptionCreationServiceImpl implements SubscriptionCreationServ
                 }else{
                     account.setStatus(Account.ACCOUNT_ACTIVE);
                 }
+                account.setAccountOrder(subscriptionCreate.getPayload().getOrder());
                 accountService.save(account);
                 subscriptionEventRepository.save(subscriptionCreate);
                 return SubscriptionJsonResponse.getSuccessResponse(account.getAccountIdentifier());

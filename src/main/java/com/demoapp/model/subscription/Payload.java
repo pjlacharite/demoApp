@@ -12,12 +12,14 @@ public class Payload implements Serializable {
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "company_fk")
     private Company company;
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "order_fk")
+
+    @Transient
     private Order order;
 
     @Transient
     private Account account;
+
+    private Notice notice;
 
     public Company getCompany() {
         return company;
@@ -41,5 +43,13 @@ public class Payload implements Serializable {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Notice getNotice() {
+        return notice;
+    }
+
+    public void setNotice(Notice notice) {
+        this.notice = notice;
     }
 }

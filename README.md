@@ -17,9 +17,14 @@ Currently supported APIs
 ### 4. Subscription Cancel 
 /subscription/cancel?eventUrl={eventUrl}
 
-# Running the application
+# Packaging and Running the application
 
-Running the application from terminal
+Packaging and running the application
+```bash
+    mvn package && java -jar target/demoapp-0.0.1-SNAPSHOT.jar
+```
+
+Running the application from terminal using spring-boot
 ```bash
     mvn spring-boot:run
 ```
